@@ -1,9 +1,9 @@
 const os = require('os');
+const log = require('./logger');
 
-var eventLoop = 0;
+var eventLoop = 1;
 
 setInterval(() => {
-    //console.clear();
     process.stdout.write('\x1Bc'); 
 
     const {freemem, totalmem} = os;
@@ -12,16 +12,19 @@ setInterval(() => {
     const mem = parseInt(freemem() / 1024 / 1024);
     const percents = parseInt((mem / total) * 100);
 
+
     const stats = {
+        actionNumber: eventLoop,
         free: `${mem} MB`,
         total: `${total} MB`,
         usage: `${percents}%`
     }
 
-    eventLoop++;
-
-    console.log('=== PC STATUS ' + eventLoop + ' === ');
+    console.log('=== PC STATUS === ');
     console.table(stats);
+
+    log(`${JSON.stringify(stats)}\n`);
+    eventLoop++;
 }, 1000)
 
 

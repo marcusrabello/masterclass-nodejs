@@ -11,6 +11,14 @@ async function loadContent() {
 
 loadContent();
 
+async function changeObject(name, url, del) {
+    let lastUrl = del ? "&del=1" : "";
+
+    const res = await fetch("http://localhost:3000/?name="+name+"&url="+url+lastUrl).then((data) => data.json())
+    
+    res.urls.map(({name, url}) => addElement({name, url}))
+}
+
 function addElement({ name, url }) {
     const li = document.createElement('li')
     const a = document.createElement("a")
@@ -21,16 +29,17 @@ function addElement({ name, url }) {
     a.target = "_blank"
 
     trash.innerHTML = "x"
-    trash.onclick = () => removeElement(trash)
+    trash.onclick = () => removeElement(trash, name, url)
 
     li.append(a)
     li.append(trash)
     ul.append(li)
 }
 
-function removeElement(el) {
+function removeElement(el, name, url) {
     if (confirm('Tem certeza que deseja deletar?'))
-        el.parentNode.remove()
+        el.parentNode.remove();
+        changeObject(name, url, true);
 }
 
 form.addEventListener("submit", (event) => {
@@ -49,7 +58,8 @@ form.addEventListener("submit", (event) => {
     if (!/^http/.test(url)) 
         return alert("Digite a url da maneira correta")
 
-    addElement({ name, url })
+    changeObject(name, url, false);
+    addElement({ name, url });
 
     input.value = ""
 })

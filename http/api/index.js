@@ -12,7 +12,7 @@ function writeFile(callback){
         error => {
             if(error) throw error
 
-            callback(JSON.stringify({message: "Conteudo deletado"}));
+            callback(JSON.stringify({message: "Conteudo alterado"}));
         }
     );
 }
@@ -23,6 +23,10 @@ http.createServer((req, res) => {
     res.writeHead(200, {
         'Access-Control-Allow-Origin': '*'
     })
+
+    console.log(!name);
+    console.log(!url);
+    console.log(del);
 
     if(!name || !url)
         return res.end(JSON.stringify(data));
